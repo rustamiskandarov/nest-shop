@@ -18,8 +18,8 @@ export class UserService {
 		return await this.userRepository.save(newUser);
 	}
 
-	async findOne(email): Promise<User> {
-		return await this.userRepository.findOne({email: email})
+	async findOne(id): Promise<User> {
+		return await this.userRepository.findOne(id)
 	}
 
 	
