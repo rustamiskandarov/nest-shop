@@ -1,11 +1,11 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, NotFoundException, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './DTO/createUser.dto';
 import { User } from './models/user.entity';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcryptjs';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateUserDto } from './DTO/updateUser.dto';
-import { last } from 'rxjs';
+import { last, NotFoundError } from 'rxjs';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
@@ -49,6 +49,10 @@ export class UserController {
 	@UseGuards(AuthGuard)
 	@Put(':id')
 	async update(@Param() id: number, @Body() body: UpdateUserDto): Promise<any>{
+		if(!await this.userService.findOne(id)){
+			throw new NotFoundException('Element not found');
+		}		
+
 		if(body.password){
 			body.password = await bcrypt.hash(body.password, 12);
 		}

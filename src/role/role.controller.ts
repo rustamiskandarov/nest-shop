@@ -20,6 +20,7 @@ export class RoleController {
 		return await this.roleService.create(
 			{
 				name: body.name,
+				permissions: body.permissions.map(id=>({id})),
 				description: body.description
 			}
 		);
@@ -48,7 +49,8 @@ export class RoleController {
 		
 		return await this.roleService.update(id, {
 			name: body.name,
-			description: body.description
+			description: body.description,
+			permissions: body.permissions.map(id => ({ id })),
 		});
 	}
 

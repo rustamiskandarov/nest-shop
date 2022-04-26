@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from 'src/auth/models/login.dto';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { UpdateUserDto } from './DTO/updateUser.dto';
 import { User } from './models/user.entity';
 
@@ -38,7 +38,7 @@ export class UserService {
 
 	async findOne(id): Promise<User> {
 		const user = await this.userRepository.findOne(id);
-
+		console.log(user);
 		return user;
 	}
 	async findOneByEmail(email): Promise<User> {
@@ -46,7 +46,12 @@ export class UserService {
 	}
 
 	async update(id: number, data ): Promise<any> {
-		return await this.userRepository.update(id, data);
+		const result:UpdateResult = await this.userRepository.update(id, data);
+		console.log(result);
+		if(result){
+			return await this.userRepository.findOne(id);
+		}
+		
 	}
 
 	
