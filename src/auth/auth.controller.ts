@@ -20,10 +20,15 @@ export class AuthController {
 		if(body.password !== body.password_confirm){
 			throw new BadRequestException('Password do not match!')
 		}
+		try {
+			await this.userService.findOneByEmail(body.email);
+		} catch (error) {
+			throw new BadRequestException("Email id busy ")
+		}
 		let newUser = new User();
 		newUser.email = body.email;
 		newUser.last_name = body.last_name;
-		newUser.firts_name = body.first_name;
+		newUser.first_name = body.first_name;
 		newUser.password = await bcrypt.hash(body.password, 12);
 
 		return await this.userService.create(newUser);
@@ -31,11 +36,9 @@ export class AuthController {
 	@Post('login')
 	async login(
 		@Body() body: LoginDto,
-		@Res(
-			{passthrough: true}
-			) res: Response
+		@Res({passthrough: true}) res: Response
 		):Promise<User>{
-		const user = await this.userService.findOne(body.email);
+		const user = await this.userService.findOneByEmail(body.email);
 
 		if(!user){
 			throw new NotFoundException('User not found');
@@ -45,7 +48,7 @@ export class AuthController {
 			throw new BadRequestException('Invalid login or password')
 		}
 
-		const jwt = await this.jwtService.signAsync({id: user.id, first_name: user.firts_name, email: user.email});
+		const jwt = await this.jwtService.signAsync({id: user.id, first_name: user.first_name, email: user.email});
 		res.cookie('jwt', jwt, {httpOnly: true})
 		return user;
 	}
