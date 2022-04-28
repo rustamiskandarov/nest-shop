@@ -5,7 +5,6 @@ import { UserService } from './user.service';
 import * as bcrypt from 'bcryptjs';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateUserDto } from './DTO/updateUser.dto';
-import { last, NotFoundError } from 'rxjs';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')

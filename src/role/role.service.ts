@@ -18,15 +18,15 @@ export class RoleService {
 	async update(id: number, data): Promise<Role> {
 		const result: UpdateResult = await this.roleRepository.update(id, data);
 		if(result){
-			console.log("Updated success")
+			
 			return await this.roleRepository.findOne(id);
 		}
-		console.log("Updated fail")
+		
 		return null;
 		
 	}
 	async findOne(id: number): Promise<Role> {
-		return await this.roleRepository.findOneOrFail(id);
+		return await this.roleRepository.findOneOrFail(id, {relations: ['permissions']});
 	}
 	async delete(id: number): Promise<UpdateResult> {
 		return await this.roleRepository.softDelete(id);

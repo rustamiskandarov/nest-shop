@@ -5,14 +5,9 @@ export class Permission {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column()
+	@Column({unique: true})
 	name: string;
 
-	@ManyToMany(()=>Permission, {cascade: true})
-	@JoinTable({
-		name: 'role_permissions',
-		joinColumn: {name: 'role_id', referencedColumnName: 'id' },
-		inverseJoinColumn: {name: 'permission_id', referencedColumnName: 'id'}
-	})
-	permissions: Permission[];
+	@Column()
+	description: string;
 }

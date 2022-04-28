@@ -21,7 +21,8 @@ export class RoleController {
 			{
 				name: body.name,
 				permissions: body.permissions.map(id=>({id})),
-				description: body.description
+				description: body.description,
+
 			}
 		);
 	}
@@ -44,12 +45,13 @@ export class RoleController {
 		try {
 			await this.roleService.findOne(id)
 		} catch (error) {
-			
+			throw new NotFoundException("Element not found");
 		}
-		
-		return await this.roleService.update(id, {
-			name: body.name,
-			description: body.description,
+		await this.roleService.update(id, {name: body.name, description: body.description});
+		const role = await this.roleService.findOne(id);
+
+		return await this.roleService.create({
+			...role,
 			permissions: body.permissions.map(id => ({ id })),
 		});
 	}
