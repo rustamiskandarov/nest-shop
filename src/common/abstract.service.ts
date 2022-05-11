@@ -3,24 +3,22 @@ import { Repository, UpdateResult } from "typeorm";
 import { PaginatedResult } from "./paginated-result.interface";
 
 @Injectable()
-export abstract class AbstrictService  {
-	protected constructor(protected readonly repsitory: Repository<any>) {}
+export abstract class AbstrictService {
+	protected constructor(protected readonly repsitory: Repository<any>) { }
 
-	async all(): Promise<any[]> {
-		return this.repsitory.find();
+	async all(relations = []): Promise<any[]> {
+		return this.repsitory.find({relations});
 	}
-	async create(data): Promise<any> {
-		return await this.repsitory.save(data);
-	}
-
-	async paginate(page: number = 1, take: number = 10):Promise<PaginatedResult> {
-		const [users, total] = await this.repsitory.findAndCount({
+	
+	async paginate(page: number = 1, take: number = 10, relations: any[]=[]): Promise<PaginatedResult> {
+		const [data, total] = await this.repsitory.findAndCount({
 			take,
-			skip: (page - 1) * take
+			skip: (page - 1) * take,
+			relations
 		});
 
 		return {
-			data: users,
+			data,
 			meta: {
 				total,
 				page,
@@ -30,20 +28,22 @@ export abstract class AbstrictService  {
 		}
 	}
 
-	async findOne(id): Promise<any> {
-		return await this.repsitory.findOne(id);
+	async create(data): Promise<any> {
+		return await this.repsitory.save(data);
 	}
-	
-	async findOneByEmail(email): Promise<any> {
-		return await this.repsitory.findOne({ email })
+
+	async findOne(conditions, relations = []): Promise<any> {
+		return await this.repsitory.findOne(conditions, {
+			relations
+		});
 	}
 
 	async update(id: number, data): Promise<any> {
-		const result: UpdateResult = await this.repsitory.update(id, data);
-		if (result) {
-			return await this.repsitory.findOne(id);
-		}
+		return await this.repsitory.update(id, data);
+	}
 
+	async delete(id: number): Promise<any> {
+		return await this.repsitory.delete(id);
 	}
 
 }

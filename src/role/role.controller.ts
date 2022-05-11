@@ -9,8 +9,8 @@ export class RoleController {
 	constructor(private readonly roleService: RoleService) { }
 
 	@Get()
-	async all(): Promise<any> {
-		return await this.roleService.get();
+	async all(relations: any[] = []): Promise<any> {
+		return await this.roleService.all(relations);
 	}
 
 	//@UseGuards(AuthGuard)
@@ -30,13 +30,8 @@ export class RoleController {
 	//@UseGuards(AuthGuard)
 	@Get(':id')
 	async getOneById(@Param('id') id: number): Promise<Role> {
-		let role:Role;
-		try {
-			role = await this.roleService.findOne(id)
-		} catch (error) {
-			throw new NotFoundException("Element not found");
-		}
-		return role;
+		
+		return await this.roleService.findOne({ id }, ['permissions']);
 	}
 	
 	//@UseGuards(AuthGuard)

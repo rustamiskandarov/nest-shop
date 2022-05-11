@@ -10,7 +10,7 @@ export class PermissionController {
 
 	@Get()
 	async all(): Promise<any> {
-		return await this.permissinoService.get();
+		return await this.permissinoService.all();
 	}
 
 	//@UseGuards(AuthGuard)

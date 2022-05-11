@@ -8,12 +8,13 @@ import { CommonModule } from './common/common.module';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 
+
 @Module({
 	imports: [
 		TypeOrmModule.forRoot({
 			type: 'mysql',
-			host: 'db',
-			port: 3306,
+			host: 'localhost',
+			port: 33066,
 			username: 'root',
 			password: 'root',
 			database: 'admin',
