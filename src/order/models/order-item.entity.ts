@@ -8,7 +8,7 @@ export class OrderItem {
 	id: string;
 
 	@Column()
-	product_itle: string;
+	product_title: string;
 
 	@Column()
 	price: number;
