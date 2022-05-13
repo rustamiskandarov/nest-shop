@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
+import { ProductModule } from './product/product.module';
 
 
 @Module({
@@ -26,7 +27,8 @@ import { PermissionModule } from './permission/permission.module';
 		AuthModule,
 		CommonModule,
 		RoleModule,
-		PermissionModule],
+		PermissionModule,
+		ProductModule],
 	controllers: [AppController],
 	providers: [AppService],
 })

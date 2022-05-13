@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Repository, UpdateResult } from "typeorm";
 import { PaginatedResult } from "./paginated-result.interface";
 
@@ -33,9 +33,13 @@ export abstract class AbstrictService {
 	}
 
 	async findOne(conditions, relations = []): Promise<any> {
-		return await this.repsitory.findOne(conditions, {
+		const result = await this.repsitory.findOne(conditions, {
 			relations
 		});
+		if(result==null){
+			throw new NotFoundException("Элемент не найден")
+		}
+		return result;
 	}
 
 	async update(id: number, data): Promise<any> {
