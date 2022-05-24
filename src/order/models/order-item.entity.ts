@@ -11,9 +11,15 @@ export class OrderItem {
 	product_title: string;
 
 	@Column()
+	product_slug: string;
+
+	@Column()
 	price: number;
 
 	@Column()
+	productId: number;
+
+	@Column({default: 1})
 	quantity: number;
 
 	@ManyToOne(() => Order, order=>order.order_items)

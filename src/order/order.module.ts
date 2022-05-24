@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from 'src/common/common.module';
 import { OrderItem } from './models/order-item.entity';
 import { Order } from './models/order.entity';
+import { OrderItemService } from './order-item.service';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 
@@ -12,6 +13,6 @@ import { OrderService } from './order.service';
 		TypeOrmModule.forFeature([Order, OrderItem])
 	],
 	controllers: [OrderController],
-	providers: [OrderService]
+	providers: [OrderService, OrderItemService]
 })
 export class OrderModule { }

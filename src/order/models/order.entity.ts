@@ -1,5 +1,5 @@
 import { Exclude, Expose } from "class-transformer";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, ColumnType, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderItem } from "./order-item.entity";
 
 @Entity('orders')
@@ -7,15 +7,11 @@ export class Order {
 	@PrimaryGeneratedColumn()
 	id: string;
 
-	@Column()
+	@Column({default: 1})
+	statusId: number 
+	
 	@Exclude()
 	first_name: string;
-
-	@Column({nullable:true})
-	producer: string;
-
-	@Column({ nullable: true })
-	brand: string;
 
 	@Column()
 	@Exclude()
@@ -27,10 +23,10 @@ export class Order {
 	@CreateDateColumn()
 	created_at: string;
 
-	@Column()
+	@CreateDateColumn()
 	update_at: string;
 
-	@OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+	@OneToMany(() => OrderItem, orderItem => orderItem.order)
 	order_items: OrderItem[];
 
 	@Expose()

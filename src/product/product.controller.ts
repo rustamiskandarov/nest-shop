@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { HasPermission } from 'src/permission/permission.decorator';
 import { CreateProductDto } from './models/create-product.dto';
 import { Product } from './models/product.entity';
 import { UpdateProductDto } from './models/update-product.dto';
@@ -8,6 +9,8 @@ import { ProductService } from './product.service';
 export class ProductController {
 
 	constructor(private readonly productService: ProductService) { }
+
+	@HasPermission('products')
 	@Get()
 	async all(@Query('page') page: number = 1, @Query('take') take: number = 10, relations: any[] = []): Promise<any> {
 		return await this.productService.paginate(page, take, relations);
@@ -16,7 +19,13 @@ export class ProductController {
 	//@UseGuards(AuthGuard)
 	@Post('create')
 	async create(@Body() body: CreateProductDto): Promise<Product> {
-		return await this.productService.create(body);
+		const slugify = require('slugify')
+		const slug = slugify(body.title).toLowerCase() + '-' + Math.floor(Math.random() * 1000000);
+
+		return await this.productService.create({
+			...body,
+			slug
+		});
 	}
 
 	//@UseGuards(AuthGuard)
